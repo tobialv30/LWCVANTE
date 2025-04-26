@@ -1,34 +1,109 @@
-.slds-box {
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+/* Contenedor general */
+.contenedor-principal {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-lightning-button {
+/* Barra de progreso */
+.progreso-fondo {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Título */
+.titulo-principal {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+/* Botones crear/usar */
+.opciones-botones {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.boton-opcion {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+}
+
+/* Formulario creación tipo */
+.seccion-formulario {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Botón confirmar tipo */
+.separador-boton-confirmar {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.boton-confirmar {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+}
+
+/* Resumen tipo cargado */
+.tarjeta-resumen {
+    background: #e7f3ff;
+    border-left: 5px solid #1b96ff;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+}
+
+/* CSV input y botón confirmar en línea */
+.carga-csv-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.input-csv {
+    flex: 1;
+}
+
+.boton-confirmar-csv {
+    flex-shrink: 0;
+    background-color: #28a745;
+    color: white;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+}
+
+/* Tabla de preview */
+.tabla-preview {
+    margin-top: 2rem;
+}
+
+
+.lista-tipos {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
     margin-top: 1rem;
 }
 
-lightning-radio-group {
-    margin-bottom: 1rem;
+.item-tipo {
+    padding: 0.8rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
 }
 
-.lightning-card {
-    background: white;
-}
-
-.slds-progress {
-    margin-bottom: 2rem;
-}
-
-/* 👇 Nuevo agregado */
-.progreso-container {
-    margin-bottom: 1rem;
-}
-
-.titulo-principal {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    color: #2a2a2a;
+.item-tipo:hover {
+    background-color: #f1f1f1;
 }
 

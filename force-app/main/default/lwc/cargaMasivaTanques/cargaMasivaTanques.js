@@ -7,28 +7,27 @@ import papaparseLib from '@salesforce/resourceUrl/papaparser';
 import { loadScript } from 'lightning/platformResourceLoader';
 
 export default class CargaMasivaTanques extends LightningElement {
-    // 🧠 Control del wizard
-    @track modoSeleccionado = ''; // 'nuevo' | 'existente'
     @track tipoConfirmado = false;
     @track mostrarNuevoTipo = false;
     @track mostrarTipoExistente = false;
-    @track pasoActual = '1'; // '1', '2', '3'
-    
-    
-    @track mostrarModal = false; // ➡️ Modal oculto por defecto
+    @track mostrarResumenTipoNuevo = false;
+    @track pasoActual = '1';
 
+    @track mostrarModal = false;
 
-    // 📋 Datos
     @track tipoOptions = [];
+
+
     selectedTipoId = '';
+    tipoSeleccionado = null;
+    searchTerm = '';
+
     nuevaMarca = '';
     nuevaCapacidad = '';
     nuevoPrecio = '';
-    
-    
+
     nuevoTipoPendiente = null;
 
-    // 📄 CSV y tabla
     csvCargado = false;
     tanquesParseados = [];
     papaparseInitialized = false;
@@ -38,27 +37,7 @@ export default class CargaMasivaTanques extends LightningElement {
         { label: 'Estado', fieldName: 'estado' }
     ];
 
-
-    // Mostrar modal
-    abrirModal() {
-        this.mostrarModal = true;
-    }
-    
-    // Cerrar modal
-    cerrarModal() {
-        this.mostrarModal = false;
-        this.tipoConfirmado = false;
-        this.modoSeleccionado = '';
-        this.selectedTipoId = '';
-        this.csvCargado = false;
-        this.tanquesParseados = [];
-        this.pasoActual = '1'; // Volver al paso inicial
-    }
-    
-    
-    
-    
-    // 🚀 Al cargar
+    // 🚀 Inicializar
     connectedCallback() {
         this.cargarTipos();
     }
@@ -66,32 +45,40 @@ export default class CargaMasivaTanques extends LightningElement {
     async cargarTipos() {
         const tipos = await getTipos();
         this.tipoOptions = tipos.map(t => ({ label: t.Name, value: t.Id }));
+        this.filteredTipoOptions = [...this.tipoOptions];
     }
 
-    // 📍 Opciones del radio group
-    get opcionesTipo() {
-        return [
-            { label: 'Crear nuevo tipo de tanque', value: 'nuevo' },
-            { label: 'Usar tipo existente', value: 'existente' }
-        ];
+    // ✅ Botón "Crear Nuevo Tipo"
+    activarNuevoTipo() {
+        this.resetAll();
+        this.mostrarNuevoTipo = true;
     }
 
-    // 🔄 Manejar opción nuevo/existente
-    handleModoChange(event) {
-        this.modoSeleccionado = event.detail.value;
+    // ✅ Botón "Usar Tipo Existente"
+    activarTipoExistente() {
+        this.resetAll();
+        this.mostrarTipoExistente = true;
+    }
+
+    // ✅ Reset General (cuando cambiás entre modos o al cerrar modal)
+    resetAll() {
         this.tipoConfirmado = false;
-        this.pasoActual = '1'; // Volver a paso 1
-
-        if (this.modoSeleccionado === 'nuevo') {
-            this.mostrarNuevoTipo = true;
-            this.mostrarTipoExistente = false;
-        } else {
-            this.mostrarNuevoTipo = false;
-            this.mostrarTipoExistente = true;
-        }
+        this.mostrarNuevoTipo = false;
+        this.mostrarTipoExistente = false;
+        this.mostrarResumenTipoNuevo = false;
+        this.pasoActual = '1';
+        this.selectedTipoId = '';
+        this.tipoSeleccionado = null;
+        this.searchTerm = '';
+        this.nuevaMarca = '';
+        this.nuevaCapacidad = '';
+        this.nuevoPrecio = '';
+        this.nuevoTipoPendiente = null;
+        this.csvCargado = false;
+        this.tanquesParseados = [];
     }
 
-    // 🛠 Inputs de creación de tipo
+    // 📋 Formulario
     handleInputChange(event) {
         const label = event.target.label;
         if (label === 'Marca') this.nuevaMarca = event.target.value;
@@ -99,60 +86,64 @@ export default class CargaMasivaTanques extends LightningElement {
         if (label === 'Precio de Lista') this.nuevoPrecio = event.target.value;
     }
 
-    // 💾 Crear nuevo tipo
-    async crearTipo() {
-        try {
-            
-            this.nuevoTipoPendiente = {
-                Name: this.nuevaMarca,
-                Capacidad__c: parseInt(this.nuevaCapacidad),
-                Precio_de_Lista__c: parseFloat(this.nuevoPrecio)
-            };
-            this.tipoConfirmado = true;
-            this.pasoActual = '2';
-            this.mostrarNuevoTipo = false;
+    // 🔍 Búsqueda tipo existente
+    handleSearch(event) {
+        this.searchTerm = event.target.value.toLowerCase();
+    }
 
-            /*
-            const id = await crearTipoTanque({
-                marca: this.nuevaMarca,
-                capacidad: parseInt(this.nuevaCapacidad),
-                precio: parseFloat(this.nuevoPrecio)
-            });
-            this.selectedTipoId = id;
-            this.tipoConfirmado = true;
-            this.pasoActual = '2'; // Pasar a paso 2
-            this.mostrarNuevoTipo = false;
-            await this.cargarTipos();
-
-            */
-        
-        } catch (err) {
-            console.error('Error creando tipo:', err);
+    get filteredTipoOptions() {
+        if (!this.searchTerm) {
+            return this.tipoOptions;
         }
+        return this.tipoOptions.filter(
+            t => t.label.toLowerCase().includes(this.searchTerm)
+        );
     }
+    
 
-    // 🔽 Elegir tipo existente
-    handleTipoChange(event) {
-        this.selectedTipoId = event.detail.value;
-        this.pasoActual = '2'; // Pasar a paso 2
+    handleSelectTipo(event) {
+        const tipoId = event.currentTarget.dataset.id;
+        const tipo = this.tipoOptions.find(t => t.value === tipoId);
+
+        this.selectedTipoId = tipoId;
+        this.tipoSeleccionado = tipo;
+        this.pasoActual = '2';
         this.tipoConfirmado = true;
+        this.mostrarTipoExistente = false;
     }
 
-    // ⚡ Cargar librería PapaParse
+    // 📤 Crear nuevo tipo
+    async crearTipo() {
+        if (!this.nuevaMarca || !this.nuevaCapacidad || !this.nuevoPrecio) {
+            alert('Por favor completa todos los campos.');
+            return;
+        }
+
+        this.nuevoTipoPendiente = {
+            Name: this.nuevaMarca,
+            Capacidad__c: parseInt(this.nuevaCapacidad),
+            Precio_de_Lista__c: parseFloat(this.nuevoPrecio)
+        };
+
+        this.tipoConfirmado = true;
+        this.pasoActual = '2';
+        this.mostrarNuevoTipo = false;
+        this.mostrarResumenTipoNuevo = true;
+    }
+
+    // 📄 Carga CSV
     renderedCallback() {
         if (this.papaparseInitialized) return;
 
         loadScript(this, papaparseLib)
             .then(() => {
                 this.papaparseInitialized = true;
-                console.log('PapaParse cargado');
             })
             .catch(error => {
                 console.error('Error cargando PapaParse', error);
             });
     }
 
-    // 📑 Cargar archivo CSV
     handleFileUpload(event) {
         const file = event.target.files[0];
         if (!file || !this.papaparseInitialized) return;
@@ -172,7 +163,7 @@ export default class CargaMasivaTanques extends LightningElement {
                 if (camposValidos && datos.length > 0) {
                     this.tanquesParseados = datos;
                     this.csvCargado = true;
-                    this.pasoActual = '3'; // Ahora está en Confirmar
+                    this.pasoActual = '3';
                 } else {
                     this.csvCargado = false;
                     alert('El archivo CSV no contiene columnas válidas o está vacío.');
@@ -184,18 +175,16 @@ export default class CargaMasivaTanques extends LightningElement {
         });
     }
 
-    // 🚀 Confirmar carga de tanques
-
+    // 🚀 Confirmar carga
     async confirmarCarga() {
         try {
             if ((!this.selectedTipoId && !this.nuevoTipoPendiente) || this.tanquesParseados.length === 0) {
-                alert('Faltan datos para la carga.');
+                alert('Faltan datos.');
                 return;
             }
-    
+
             let tipoIdFinal = this.selectedTipoId;
-    
-            // Si es un tipo nuevo → insertarlo primero
+
             if (this.nuevoTipoPendiente) {
                 const result = await crearTipoTanque({
                     marca: this.nuevoTipoPendiente.Name,
@@ -204,7 +193,7 @@ export default class CargaMasivaTanques extends LightningElement {
                 });
                 tipoIdFinal = result;
             }
-    
+
             if (this.tanquesParseados.length === 1) {
                 await cargarTanqueIndividual({
                     tanqueJson: this.tanquesParseados[0],
@@ -216,51 +205,24 @@ export default class CargaMasivaTanques extends LightningElement {
                     tipoId: tipoIdFinal
                 });
             }
-    
+
             this.abrirModal();
-    
+            this.resetAll(); //  Limpiar todo al finalizar exitosamente
+        
         } catch (error) {
             console.error('Error cargando tanques:', JSON.stringify(error, null, 2));
             const msg = error?.body?.message || error.message || 'Error desconocido';
             alert('Error al cargar tanques:\n' + msg);
         }
     }
-    
 
-
-
-    /*
-
-    async confirmarCarga() {
-        try {
-            if (!this.selectedTipoId || this.tanquesParseados.length === 0) {
-                alert('Faltan datos para la carga.');
-                return;
-            }
-
-            if (this.tanquesParseados.length === 1) {
-                await cargarTanqueIndividual({
-                    tanqueJson: this.tanquesParseados[0],
-                    tipoId: this.selectedTipoId
-                });
-            } else {
-                await ejecutarCargaMasivaBatch({
-                    tanquesJson: this.tanquesParseados,
-                    tipoId: this.selectedTipoId
-                });
-            }
-
-            this.abrirModal();
-
-
-        } catch (error) {
-            console.error('Error cargando tanques:', JSON.stringify(error, null, 2));
-            const msg = error?.body?.message || error.message || 'Error desconocido';
-            alert('Error al cargar tanques:\n' + msg);
-        }
+    abrirModal() {
+        this.mostrarModal = true;
     }
-    */
 
-
+    cerrarModal() {
+        this.mostrarModal = false;
     }
+}
+
 
