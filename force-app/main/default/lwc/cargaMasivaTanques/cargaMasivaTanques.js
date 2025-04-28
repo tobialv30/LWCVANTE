@@ -6,6 +6,7 @@ import ejecutarCargaMasivaBatch from '@salesforce/apex/TanqueController.ejecutar
 import papaparseLib from '@salesforce/resourceUrl/papaparser';
 import { loadScript } from 'lightning/platformResourceLoader';
 
+
 export default class CargaMasivaTanques extends LightningElement {
     @track tipoConfirmado = false;
     @track mostrarNuevoTipo = false;
@@ -14,8 +15,13 @@ export default class CargaMasivaTanques extends LightningElement {
     @track pasoActual = '1';
 
     @track mostrarModal = false;
+    @track mostrarModalError = false;
+    @track mensajeError = '';
+    
+
 
     @track tipoOptions = [];
+
 
 
     selectedTipoId = '';
@@ -114,10 +120,14 @@ export default class CargaMasivaTanques extends LightningElement {
 
     // 📤 Crear nuevo tipo
     async crearTipo() {
+        
+
+
         if (!this.nuevaMarca || !this.nuevaCapacidad || !this.nuevoPrecio) {
-            alert('Por favor completa todos los campos.');
+            this.mostrarError('Error faltan datos o estos son inválidos.');
             return;
         }
+
 
         this.nuevoTipoPendiente = {
             Name: this.nuevaMarca,
@@ -147,7 +157,7 @@ export default class CargaMasivaTanques extends LightningElement {
     handleFileUpload(event) {
         const file = event.target.files[0];
         if (!file || !this.papaparseInitialized) return;
-
+    
         Papa.parse(file, {
             header: true,
             skipEmptyLines: true,
@@ -158,30 +168,36 @@ export default class CargaMasivaTanques extends LightningElement {
                     numeroDeSerie: row['Numero de Serie']?.trim(),
                     estado: row['Estado']?.trim()
                 }));
-
-                const camposValidos = datos.every(t => t.numeroDeSerie && t.estado);
+    
+                const estadosValidos = ['Disponible', 'Reservado', 'Vendido'];
+    
+                const camposValidos = datos.every(t => {
+                    const numeroSerieValido = t.numeroDeSerie && /^[A-Za-z0-9\-]+$/.test(t.numeroDeSerie);
+                    const estadoValido = t.estado && estadosValidos.includes(t.estado);
+                    return numeroSerieValido && estadoValido;
+                });
+    
                 if (camposValidos && datos.length > 0) {
                     this.tanquesParseados = datos;
                     this.csvCargado = true;
                     this.pasoActual = '3';
                 } else {
                     this.csvCargado = false;
-                    alert('El archivo CSV no contiene columnas válidas o está vacío.');
+                    this.mostrarError('El archivo CSV tiene datos inválidos. Verifique que:\n- Estado sea "Disponible", "Reservado" o "Vendido".\n- Número de serie contenga solo letras, números o guiones.');
                 }
             },
             error: (error) => {
                 console.error('Error parseando CSV:', error);
+                this.mostrarError('Error parseando CSV.');
             }
         });
     }
+    
 
     // 🚀 Confirmar carga
     async confirmarCarga() {
         try {
-            if ((!this.selectedTipoId && !this.nuevoTipoPendiente) || this.tanquesParseados.length === 0) {
-                alert('Faltan datos.');
-                return;
-            }
+            
 
             let tipoIdFinal = this.selectedTipoId;
 
@@ -223,6 +239,19 @@ export default class CargaMasivaTanques extends LightningElement {
     cerrarModal() {
         this.mostrarModal = false;
     }
+
+    
+    mostrarError(mensaje) {
+        this.mensajeError = mensaje;
+        this.mostrarModalError = true;
+    }
+    
+    cerrarModalError() {
+        this.mostrarModalError = false;
+        this.mensajeError = '';
+    }
+    
+    
 }
 
 
