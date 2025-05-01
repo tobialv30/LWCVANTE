@@ -1,5 +1,5 @@
 public class BitlyService {
-    private static final String BITLY_TOKEN = '69f61b88e362449896656e4cfec41aa695fb5f1d';
+    private static final String BITLY_TOKEN = '97f7c7f2bd694cdfe17a2face1496526cb1376db';
 
     public String acortarUrl(String longUrl) {
         HttpRequest req = new HttpRequest();
@@ -9,7 +9,7 @@ public class BitlyService {
         req.setHeader('Content-Type', 'application/json');
         req.setHeader('Accept', 'application/json');
         Map<String, Object> body = new Map<String, Object>();
-        body.put('group_guid', 'Bp4phjZhccx');
+        body.put('group_guid', 'Bp4t0wZLabc');
         body.put('long_url', longUrl);
         body.put('domain', 'bit.ly');
         

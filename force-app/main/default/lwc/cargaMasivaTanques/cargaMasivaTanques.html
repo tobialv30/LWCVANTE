@@ -1,8 +1,7 @@
 <template>
-
     <div class="contenedor-principal">
 
-        <!-- 🚀 Barra de progreso -->
+        <!-- Barra de progreso -->
         <div class="barra-blanca progreso-fondo">
             <lightning-progress-indicator current-step={pasoActual} type="base" has-error="false">
                 <lightning-progress-step label="Tipo" value="1"></lightning-progress-step>
@@ -11,31 +10,62 @@
             </lightning-progress-indicator>
         </div>
 
-        <!-- 🎯 Título -->
+        <!-- Título -->
         <div class="titulo-principal barra-blanca">
             ¿Qué deseas realizar?
         </div>
 
-        <!-- 🚀 Botones -->
+        <!-- Botones -->
         <div class="opciones-botones">
-            <lightning-button label="Crear nuevo tipo de tanque" variant="brand" onclick={activarNuevoTipo} class="boton-opcion"></lightning-button>
-            <lightning-button label="Usar tipo existente" variant="neutral" onclick={activarTipoExistente} class="boton-opcion"></lightning-button>
+            <lightning-button 
+                label="Crear nuevo tipo de tanque" 
+                variant="brand" 
+                onclick={activarNuevoTipo} 
+                class="boton-opcion">
+            </lightning-button>
+            <lightning-button 
+                label="Usar tipo existente" 
+                variant="neutral" 
+                onclick={activarTipoExistente} 
+                class="boton-opcion">
+            </lightning-button>
         </div>
 
-        <!-- 🛠 Formulario nuevo tipo -->
+        <!-- Formulario nuevo tipo -->
         <template if:true={mostrarNuevoTipo}>
             <div class="seccion-formulario">
-                <lightning-input label="Marca" placeholder="Ej: TanqueX" value={nuevaMarca} onchange={handleInputChange}></lightning-input>
-                <lightning-input label="Capacidad (L)" placeholder="Solo números" type="number" value={nuevaCapacidad} onchange={handleInputChange}></lightning-input>
-                <lightning-input label="Precio de Lista" placeholder="Solo números" type="number" value={nuevoPrecio} onchange={handleInputChange}></lightning-input>
-
+                <lightning-input 
+                    label="Marca" 
+                    placeholder="Ej: TanqueX" 
+                    value={nuevaMarca} 
+                    onchange={handleInputChange}>
+                </lightning-input>
+                <lightning-input 
+                    label="Capacidad (L)" 
+                    placeholder="Solo números" 
+                    type="number" 
+                    value={nuevaCapacidad} 
+                    onchange={handleInputChange}>
+                </lightning-input>
+                <lightning-input 
+                    label="Precio de Lista" 
+                    placeholder="Solo números" 
+                    type="number" 
+                    value={nuevoPrecio} 
+                    onchange={handleInputChange}>
+                </lightning-input>
                 <div class="separador-boton-confirmar">
-                    <lightning-button label="Confirmar nuevo tipo" variant="success" class="boton-confirmar" onclick={crearTipo}></lightning-button>
+                    <lightning-button 
+                        label="Confirmar nuevo tipo" 
+                        variant="success" 
+                        class="boton-confirmar" 
+                        onclick={crearTipo}>
+                    </lightning-button>
                 </div>
             </div>
         </template>
 
-        <!-- 📋 Resumen nuevo tipo -->
+        <!-- Resumen nuevo tipo -->
         <template if:true={mostrarResumenTipoNuevo}>
             <div class="tarjeta-resumen">
                 <h3>Nuevo Tipo Cargado</h3>
@@ -45,110 +75,110 @@
             </div>
         </template>
 
-
-<!-- Paso 2B: Usar tipo existente -->
-<template if:true={mostrarTipoExistente}>
-    <div class="seccion-formulario">
-        <lightning-input 
-            label="Buscar tipo de tanque"
-            onchange={handleSearch}>
-        </lightning-input>
-
-        <div class="lista-tipos">
-            <template for:each={filteredTipoOptions} for:item="tipo">
-                <div key={tipo.value} class="item-tipo" onclick={handleSelectTipo} data-id={tipo.value}>
-                    {tipo.label}
+        <!--Usar tipo existente -->
+        <template if:true={mostrarTipoExistente}>
+            <div class="seccion-formulario">
+                <lightning-input 
+                    label="Buscar tipo de tanque" 
+                    onchange={handleSearch}>
+                </lightning-input>
+                <div class="lista-tipos">
+                    <template for:each={filteredTipoOptions} for:item="tipo">
+                        <div 
+                            key={tipo.value} 
+                            class="item-tipo" 
+                            onclick={handleSelectTipo} 
+                            data-id={tipo.value}>
+                            {tipo.label}
+                        </div>
+                    </template>
                 </div>
-            </template>
-        </div>
-    </div>
-</template>
+            </div>
+        </template>
 
-<!-- 💡 Mostrar siempre que haya tipoSeleccionado -->
-<template if:true={tipoSeleccionado}>
-    <div class="tarjeta-resumen">
-        <h3>Tipo de Tanque Seleccionado</h3>
-        <p><b>Nombre:</b> {tipoSeleccionado.label}</p>
-    </div>
-</template>
+        <!-- Mostrar siempre que haya tipoSeleccionado -->
+        <template if:true={tipoSeleccionado}>
+            <div class="tarjeta-resumen">
+                <h3>Tipo de Tanque Seleccionado</h3>
+                <p><b>Nombre:</b> {tipoSeleccionado.label}</p>
+            </div>
+        </template>
 
-        
-
-        <!-- 📄 Carga archivo CSV + Confirmar -->
+        <!-- Carga archivo CSV + Confirmar -->
         <template if:true={tipoConfirmado}>
             <div class="seccion-formulario carga-csv-container">
-                <lightning-input
-                    type="file"
-                    label="Archivo CSV de Tanques"
-                    accept=".csv"
-                    onchange={handleFileUpload}
+                <lightning-input 
+                    type="file" 
+                    label="Archivo CSV de Tanques" 
+                    accept=".csv" 
+                    onchange={handleFileUpload} 
                     class="input-csv">
                 </lightning-input>
-
-
                 <template if:true={csvCargado}>
-                    <lightning-button
-                    label="Confirmar carga de tanques"
-                    variant="success"
-                    class="boton-confirmar-csv"
-                    onclick={confirmarCarga}>
+                    <lightning-button 
+                        label="Confirmar carga de tanques" 
+                        variant="success" 
+                        class="boton-confirmar-csv" 
+                        onclick={confirmarCarga}>
                     </lightning-button>
-                </template>           
+                </template>
             </div>
-
             <template if:true={csvCargado}>
-                <lightning-datatable
-                    key-field="id"
-                    data={tanquesParseados}
-                    columns={columnas}
-                    hide-checkbox-column="true"
+                <lightning-datatable 
+                    key-field="id" 
+                    data={tanquesParseados} 
+                    columns={columnas} 
+                    hide-checkbox-column="true" 
                     class="tabla-preview">
                 </lightning-datatable>
             </template>
         </template>
 
+        <!-- Modal éxito -->
+        <template if:true={mostrarModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-modal__title">Carga Exitosa</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p>✔️ ¡Tanques cargados correctamente!</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button 
+                            variant="brand" 
+                            label="Cerrar" 
+                            onclick={cerrarModal}>
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Modal error -->
+        <template if:true={mostrarModalError}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-theme_error">
+                        <h2 class="slds-modal__title">⚠️ Error</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p>{mensajeError}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button 
+                            variant="neutral" 
+                            label="Cerrar" 
+                            onclick={cerrarModalError}>
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
     </div>
-
-    <!-- ✅ Modal exito-->
-    <template if:true={mostrarModal}>
-        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
-            <div class="slds-modal__container">
-                <header class="slds-modal__header">
-                    <h2 class="slds-modal__title">Carga Exitosa</h2>
-                </header>
-                <div class="slds-modal__content slds-p-around_medium">
-                    <p>✔️ ¡Tanques cargados correctamente!</p>
-                </div>
-                <footer class="slds-modal__footer">
-                    <lightning-button variant="brand" label="Cerrar" onclick={cerrarModal}></lightning-button>
-                </footer>
-            </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
-    </template>
-
-    <!-- ✅ Modal error-->
-    <template if:true={mostrarModalError}>
-        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
-            <div class="slds-modal__container">
-                <header class="slds-modal__header slds-theme_error">
-                    <h2 class="slds-modal__title">⚠️ Error</h2>
-                </header>
-                <div class="slds-modal__content slds-p-around_medium">
-                    <p>{mensajeError}</p>
-                </div>
-                <footer class="slds-modal__footer">
-                    <lightning-button variant="neutral" label="Cerrar" onclick={cerrarModalError}></lightning-button>
-                </footer>
-            </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
-    </template>
-    
-
-
-
-
 </template>
 
 

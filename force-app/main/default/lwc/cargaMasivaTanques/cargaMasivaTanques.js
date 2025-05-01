@@ -43,7 +43,7 @@ export default class CargaMasivaTanques extends LightningElement {
         { label: 'Estado', fieldName: 'estado' }
     ];
 
-    // 🚀 Inicializar
+    // Inicializar
     connectedCallback() {
         this.cargarTipos();
     }
@@ -51,22 +51,23 @@ export default class CargaMasivaTanques extends LightningElement {
     async cargarTipos() {
         const tipos = await getTipos();
         this.tipoOptions = tipos.map(t => ({ label: t.Name, value: t.Id }));
-        this.filteredTipoOptions = [...this.tipoOptions];
+        this.searchTerm = '';
     }
+    
 
-    // ✅ Botón "Crear Nuevo Tipo"
+    // Botón "Crear Nuevo Tipo"
     activarNuevoTipo() {
         this.resetAll();
         this.mostrarNuevoTipo = true;
     }
 
-    // ✅ Botón "Usar Tipo Existente"
+    // Botón "Usar Tipo Existente"
     activarTipoExistente() {
         this.resetAll();
         this.mostrarTipoExistente = true;
     }
 
-    // ✅ Reset General (cuando cambiás entre modos o al cerrar modal)
+    // Reset General (cuando cambiás entre modos o al cerrar modal)
     resetAll() {
         this.tipoConfirmado = false;
         this.mostrarNuevoTipo = false;
@@ -84,7 +85,7 @@ export default class CargaMasivaTanques extends LightningElement {
         this.tanquesParseados = [];
     }
 
-    // 📋 Formulario
+    // Formulario
     handleInputChange(event) {
         const label = event.target.label;
         if (label === 'Marca') this.nuevaMarca = event.target.value;
@@ -92,7 +93,7 @@ export default class CargaMasivaTanques extends LightningElement {
         if (label === 'Precio de Lista') this.nuevoPrecio = event.target.value;
     }
 
-    // 🔍 Búsqueda tipo existente
+    // Búsqueda tipo existente
     handleSearch(event) {
         this.searchTerm = event.target.value.toLowerCase();
     }
@@ -118,11 +119,9 @@ export default class CargaMasivaTanques extends LightningElement {
         this.mostrarTipoExistente = false;
     }
 
-    // 📤 Crear nuevo tipo
+    // Crear nuevo tipo
     async crearTipo() {
         
-
-
         if (!this.nuevaMarca || !this.nuevaCapacidad || !this.nuevoPrecio) {
             this.mostrarError('Error faltan datos o estos son inválidos.');
             return;
@@ -141,7 +140,7 @@ export default class CargaMasivaTanques extends LightningElement {
         this.mostrarResumenTipoNuevo = true;
     }
 
-    // 📄 Carga CSV
+    // Carga CSV
     renderedCallback() {
         if (this.papaparseInitialized) return;
 
@@ -194,11 +193,10 @@ export default class CargaMasivaTanques extends LightningElement {
     }
     
 
-    // 🚀 Confirmar carga
+    // Confirmar carga
     async confirmarCarga() {
         try {
             
-
             let tipoIdFinal = this.selectedTipoId;
 
             if (this.nuevoTipoPendiente) {
@@ -208,6 +206,8 @@ export default class CargaMasivaTanques extends LightningElement {
                     precio: this.nuevoTipoPendiente.Precio_de_Lista__c
                 });
                 tipoIdFinal = result;
+                  
+
             }
 
             if (this.tanquesParseados.length === 1) {
@@ -253,5 +253,3 @@ export default class CargaMasivaTanques extends LightningElement {
     
     
 }
-
-
