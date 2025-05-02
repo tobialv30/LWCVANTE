@@ -1,9 +1,10 @@
 .seccion-formulario {
-    background: #f9f9f9;
+    background: linear-gradient(135deg, #f9f9f9, #ffffff);
     padding: 2.5rem;
-    border-radius: 0.8rem;
+    border-radius: 1rem;
     margin-bottom: 2.5rem;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    animation: slideIn 0.6s ease;
 }
 
 .separador-boton-confirmar {
@@ -14,9 +15,39 @@
 .boton-confirmar {
     font-size: 1.2rem;
     padding: 1rem 2.5rem;
-    transition: transform 0.2s ease;
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .boton-confirmar:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #218838, #1e7e34);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

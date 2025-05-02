@@ -1,45 +1,67 @@
 /* Contenedor principal */
 .carga-csv-container {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 0.8rem;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
+    animation: fadeIn 0.6s ease;
+    border: 1px solid #d1e9ff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carga-csv-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* Input de archivo CSV */
 .input-csv {
     font-size: 1rem;
     color: #16325c;
+    border: 2px dashed #0070d2;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.input-csv:hover {
+    border-color: #005bb5;
+    background-color: #f4faff;
 }
 
 /* Botón confirmar carga */
 .boton-confirmar-csv {
     align-self: flex-start;
-    font-size: 1.1rem;
-    padding: 0.8rem 2rem;
-    background-color: #28a745;
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #28a745, #218838);
     color: white;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .boton-confirmar-csv:hover {
-    transform: translateY(-2px);
-    background-color: #218838;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #218838, #1e7e34);
 }
 
 /* Tabla de vista previa */
 .tabla-preview {
-    border: 1px solid #dcdcdc;
+    border: 1px solid #d1e9ff;
     border-radius: 0.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    animation: slideIn 0.6s ease;
+    background: #ffffff;
 }
 
 .tabla-preview .slds-table {
@@ -61,4 +83,26 @@
 
 .tabla-preview .slds-table tr:last-child td {
     border-bottom: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

@@ -1,24 +1,35 @@
 .slds-modal__container {
     max-width: 90%;
     width: 500px;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.6s ease;
 }
 
 .slds-modal__header {
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    background-color: #0070d2;
+    color: white;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .slds-modal__footer {
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #f4f6f9;
 }
 
 .slds-modal__content {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1.6;
-    padding: 2rem !important;
+    padding: 2rem;
+    background-color: #f9f9f9;
 }
 
 /* Animación de entrada */
@@ -29,10 +40,21 @@
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }

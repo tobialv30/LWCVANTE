@@ -1,29 +1,33 @@
 /* Contenedor general */
 .contenedor-principal {
-    background: white;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
     padding: 2.5rem;
-    border-radius: 0.8rem;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     max-width: 1200px;
     margin: 0 auto;
+    animation: fadeIn 0.6s ease;
 }
 
 /* Barra de progreso */
 .progreso-fondo {
-    background: #f9f9f9;
-    padding: 1.25rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background: #f0f4f8;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 2rem;
+    border: 1px solid #d1e9ff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    animation: slideIn 0.6s ease;
 }
 
 /* Título */
 .titulo-principal {
     text-align: center;
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 2.5rem;
     color: #16325c;
+    animation: fadeIn 0.6s ease;
 }
 
 /* Botones crear/usar */
@@ -37,11 +41,18 @@
 .boton-opcion {
     font-size: 1.2rem;
     padding: 1rem 2.5rem;
-    transition: transform 0.2s ease;
+    background: linear-gradient(135deg, #0070d2, #005bb5);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .boton-opcion:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Formulario creación tipo */
@@ -72,23 +83,30 @@
 /* Resumen tipo cargado */
 .tarjeta-resumen {
     background: #e7f3ff;
-    border-left: 5px solid #1b96ff;
+    border-left: 6px solid #1b96ff;
     padding: 1.75rem;
     margin-bottom: 2.5rem;
     border-radius: 0.8rem;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-resumen:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .tarjeta-resumen h3 {
     color: #16325c;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     margin-bottom: 1rem;
     font-weight: 600;
 }
 
 .tarjeta-resumen p {
     margin-bottom: 0.75rem;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: #4a5568;
 }
 
 /* CSV input y botón confirmar en línea */
@@ -118,9 +136,10 @@
 /* Tabla de preview */
 .tabla-preview {
     margin-top: 2rem;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border-radius: 0.5rem;
     overflow: hidden;
+    animation: fadeIn 0.6s ease;
 }
 
 .lista-tipos {
@@ -142,4 +161,26 @@
 
 .item-tipo:hover {
     background-color: #f1f7ff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
