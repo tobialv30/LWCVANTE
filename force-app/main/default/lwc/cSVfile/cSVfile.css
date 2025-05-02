@@ -1,0 +1,64 @@
+/* Contenedor principal */
+.carga-csv-container {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Input de archivo CSV */
+.input-csv {
+    font-size: 1rem;
+    color: #16325c;
+}
+
+/* Botón confirmar carga */
+.boton-confirmar-csv {
+    align-self: flex-start;
+    font-size: 1.1rem;
+    padding: 0.8rem 2rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.boton-confirmar-csv:hover {
+    transform: translateY(-2px);
+    background-color: #218838;
+}
+
+/* Tabla de vista previa */
+.tabla-preview {
+    border: 1px solid #dcdcdc;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.tabla-preview .slds-table {
+    font-size: 0.95rem;
+    color: #16325c;
+}
+
+.tabla-preview .slds-table th {
+    background-color: #f4f6f9;
+    font-weight: bold;
+    text-align: left;
+    padding: 0.75rem;
+}
+
+.tabla-preview .slds-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.tabla-preview .slds-table tr:last-child td {
+    border-bottom: none;
+}

@@ -1,0 +1,28 @@
+<template>
+    <div class="seccion-formulario carga-csv-container">
+        <lightning-input 
+            type="file" 
+            label="Archivo CSV de Tanques" 
+            accept=".csv" 
+            onchange={handleFileUpload} 
+            class="input-csv">
+        </lightning-input>
+        <template if:true={csvCargado}>
+            <lightning-button 
+                label="Confirmar carga de tanques" 
+                variant="success" 
+                class="boton-confirmar-csv" 
+                onclick={handleConfirmarCarga}>
+            </lightning-button>
+        </template>
+        <template if:true={csvCargado}>
+            <lightning-datatable 
+                key-field="id" 
+                data={tanquesParseados} 
+                columns={columnas} 
+                hide-checkbox-column="true" 
+                class="tabla-preview">
+            </lightning-datatable>
+        </template>
+    </div>
+</template>

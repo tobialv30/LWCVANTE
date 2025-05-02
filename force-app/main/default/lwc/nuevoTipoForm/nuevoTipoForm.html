@@ -1,0 +1,32 @@
+<template>
+    <div class="seccion-formulario">
+        <lightning-input 
+            label="Marca" 
+            placeholder="Ej: TanqueX" 
+            value={marca} 
+            onchange={handleMarcaChange}>
+        </lightning-input>
+        <lightning-input 
+            label="Capacidad (L)" 
+            placeholder="Solo números" 
+            type="number" 
+            value={capacidad} 
+            onchange={handleCapacidadChange}>
+        </lightning-input>
+        <lightning-input 
+            label="Precio de Lista" 
+            placeholder="Solo números" 
+            type="number" 
+            value={precio} 
+            onchange={handlePrecioChange}>
+        </lightning-input>
+        <div class="separador-boton-confirmar">
+            <lightning-button 
+                label="Confirmar nuevo tipo" 
+                variant="success" 
+                class="boton-confirmar" 
+                onclick={handleConfirmar}>
+            </lightning-button>
+        </div>
+    </div>
+</template>

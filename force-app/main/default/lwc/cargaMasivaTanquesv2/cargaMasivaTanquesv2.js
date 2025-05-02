@@ -7,7 +7,7 @@ import papaparseLib from '@salesforce/resourceUrl/papaparser';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { refreshApex } from '@salesforce/apex';
 
-export default class CargaMasivaTanques extends LightningElement {
+export default class CargaMasivaTanquesv2 extends LightningElement {
     @track tipoOptions = [];
     tipoWireResult;
 
@@ -26,9 +26,12 @@ export default class CargaMasivaTanques extends LightningElement {
     @track mostrarResumenTipoNuevo = false;
     @track pasoActual = '1';
 
+    // Modal properties
     @track mostrarModal = false;
-    @track mostrarModalError = false;
-    @track mensajeError = '';
+    @track tituloModal = 'Carga Exitosa';
+    @track mensajeModal = '✔️ ¡Tanques cargados correctamente!';
+    @track varianteModal = 'brand';
+    @track esErrorModal = false;
 
     selectedTipoId = '';
     tipoSeleccionado = null;
@@ -74,13 +77,24 @@ export default class CargaMasivaTanques extends LightningElement {
         this.nuevoTipoPendiente = null;
         this.csvCargado = false;
         this.tanquesParseados = [];
+        
+        // Resetear el formulario hijo si existe
+        const formulario = this.template.querySelector('c-nuevo-tipo-form');
+        if (formulario) {
+            formulario.resetForm();
+        }
     }
 
-    handleInputChange(event) {
-        const label = event.target.label;
-        if (label === 'Marca') this.nuevaMarca = event.target.value;
-        if (label === 'Capacidad (L)') this.nuevaCapacidad = event.target.value;
-        if (label === 'Precio de Lista') this.nuevoPrecio = event.target.value;
+    handleFormError(event) {
+        this.mostrarError(event.detail);
+    }
+
+    handleConfirmarNuevoTipo(event) {
+        this.nuevoTipoPendiente = event.detail;
+        this.tipoConfirmado = true;
+        this.pasoActual = '2';
+        this.mostrarNuevoTipo = false;
+        this.mostrarResumenTipoNuevo = true;
     }
 
     handleSearch(event) {
@@ -105,24 +119,6 @@ export default class CargaMasivaTanques extends LightningElement {
         this.mostrarTipoExistente = false;
     }
 
-    async crearTipo() {
-        if (!this.nuevaMarca || !this.nuevaCapacidad || !this.nuevoPrecio) {
-            this.mostrarError('Error faltan datos o estos son inválidos.');
-            return;
-        }
-
-        this.nuevoTipoPendiente = {
-            Name: this.nuevaMarca,
-            Capacidad__c: parseInt(this.nuevaCapacidad),
-            Precio_de_Lista__c: parseFloat(this.nuevoPrecio)
-        };
-
-        this.tipoConfirmado = true;
-        this.pasoActual = '2';
-        this.mostrarNuevoTipo = false;
-        this.mostrarResumenTipoNuevo = true;
-    }
-
     renderedCallback() {
         if (this.papaparseInitialized) return;
 
@@ -135,43 +131,14 @@ export default class CargaMasivaTanques extends LightningElement {
             });
     }
 
-    handleFileUpload(event) {
-        const file = event.target.files[0];
-        if (!file || !this.papaparseInitialized) return;
+    handleCsvCargado(event) {
+        this.tanquesParseados = event.detail;
+        this.csvCargado = true;
+        this.pasoActual = '3';
+    }
 
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            trimHeaders: true,
-            complete: (results) => {
-                const datos = results.data.map((row, index) => ({
-                    id: index,
-                    numeroDeSerie: row['Numero de Serie']?.trim(),
-                    estado: row['Estado']?.trim()
-                }));
-
-                const estadosValidos = ['Disponible', 'Reservado', 'Vendido'];
-
-                const camposValidos = datos.every(t => {
-                    const numeroSerieValido = t.numeroDeSerie && /^[A-Za-z0-9\-]+$/.test(t.numeroDeSerie);
-                    const estadoValido = t.estado && estadosValidos.includes(t.estado);
-                    return numeroSerieValido && estadoValido;
-                });
-
-                if (camposValidos && datos.length > 0) {
-                    this.tanquesParseados = datos;
-                    this.csvCargado = true;
-                    this.pasoActual = '3';
-                } else {
-                    this.csvCargado = false;
-                    this.mostrarError('El archivo CSV tiene datos inválidos. Verifique que:\n- Estado sea "Disponible", "Reservado" o "Vendido".\n- Número de serie contenga solo letras, números o guiones.');
-                }
-            },
-            error: (error) => {
-                console.error('Error parseando CSV:', error);
-                this.mostrarError('Error parseando CSV.');
-            }
-        });
+    handleErrorCsv(event) {
+        this.mostrarError(event.detail);
     }
 
     async confirmarCarga() {
@@ -185,7 +152,7 @@ export default class CargaMasivaTanques extends LightningElement {
                     precio: this.nuevoTipoPendiente.Precio_de_Lista__c
                 });
 
-                await refreshApex(this.tipoWireResult); 
+                await refreshApex(this.tipoWireResult);
             }
 
             if (this.tanquesParseados.length === 1) {
@@ -206,26 +173,27 @@ export default class CargaMasivaTanques extends LightningElement {
         } catch (error) {
             console.error('Error cargando tanques:', JSON.stringify(error, null, 2));
             const msg = error?.body?.message || error.message || 'Error desconocido';
-            alert('Error al cargar tanques:\n' + msg);
+            this.mostrarError('Error al cargar tanques:\n' + msg);
         }
     }
 
     abrirModal() {
+        this.tituloModal = 'Carga Exitosa';
+        this.mensajeModal = '✔️ ¡Tanques cargados correctamente!';
+        this.varianteModal = 'brand';
+        this.esErrorModal = false;
         this.mostrarModal = true;
     }
 
-    cerrarModal() {
+    mostrarError(mensaje) {
+        this.tituloModal = 'Error';
+        this.mensajeModal = mensaje;
+        this.varianteModal = 'neutral';
+        this.esErrorModal = true;
+        this.mostrarModal = true;
+    }
+
+    handleCerrarModal() {
         this.mostrarModal = false;
     }
-
-    mostrarError(mensaje) {
-        this.mensajeError = mensaje;
-        this.mostrarModalError = true;
-    }
-
-    cerrarModalError() {
-        this.mostrarModalError = false;
-        this.mensajeError = '';
-    }
 }
-

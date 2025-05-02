@@ -1,0 +1,105 @@
+<template>
+    <div class="contenedor-principal">
+
+        <!-- Barra de progreso -->
+        <div class="barra-blanca progreso-fondo">
+            <lightning-progress-indicator current-step={pasoActual} type="base" has-error="false">
+                <lightning-progress-step label="Tipo" value="1"></lightning-progress-step>
+                <lightning-progress-step label="Archivo" value="2"></lightning-progress-step>
+                <lightning-progress-step label="Confirmar" value="3"></lightning-progress-step>
+            </lightning-progress-indicator>
+        </div>
+
+        <!-- Título -->
+        <div class="titulo-principal barra-blanca">
+            ¿Qué deseas realizar?
+        </div>
+
+        <!-- Botones -->
+        <div class="opciones-botones">
+            <lightning-button 
+                label="Crear nuevo tipo de tanque" 
+                variant="brand" 
+                onclick={activarNuevoTipo} 
+                class="boton-opcion">
+            </lightning-button>
+            <lightning-button 
+                label="Usar tipo existente" 
+                variant="neutral" 
+                onclick={activarTipoExistente} 
+                class="boton-opcion">
+            </lightning-button>
+        </div>
+
+        <!-- Formulario nuevo tipo (ahora como componente) -->
+        <template if:true={mostrarNuevoTipo}>
+            <c-nuevo-tipo-form
+                marca={nuevaMarca}
+                capacidad={nuevaCapacidad}
+                precio={nuevoPrecio}
+                onconfirmartipo={handleConfirmarNuevoTipo}
+                onerror={handleFormError}>
+            </c-nuevo-tipo-form>
+        </template>
+
+        <!-- Resumen nuevo tipo -->
+        <template if:true={mostrarResumenTipoNuevo}>
+            <div class="tarjeta-resumen">
+                <h3>Nuevo Tipo Cargado</h3>
+                <p><b>Marca:</b> {nuevoTipoPendiente.Name}</p>
+                <p><b>Capacidad:</b> {nuevoTipoPendiente.Capacidad__c} L</p>
+                <p><b>Precio de Lista:</b> ${nuevoTipoPendiente.Precio_de_Lista__c}</p>
+            </div>
+        </template>
+
+        <!--Usar tipo existente -->
+        <template if:true={mostrarTipoExistente}>
+            <div class="seccion-formulario">
+                <lightning-input 
+                    label="Buscar tipo de tanque" 
+                    onchange={handleSearch}>
+                </lightning-input>
+                <div class="lista-tipos">
+                    <template for:each={filteredTipoOptions} for:item="tipo">
+                        <div 
+                            key={tipo.value} 
+                            class="item-tipo" 
+                            onclick={handleSelectTipo} 
+                            data-id={tipo.value}>
+                            {tipo.label}
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <!-- Mostrar siempre que haya tipoSeleccionado -->
+        <template if:true={tipoSeleccionado}>
+            <div class="tarjeta-resumen">
+                <h3>Tipo de Tanque Seleccionado</h3>
+                <p><b>Nombre:</b> {tipoSeleccionado.label}</p>
+            </div>
+        </template>
+
+        <!-- Carga archivo CSV + Confirmar -->
+        <template if:true={tipoConfirmado}>
+            <c-c-s-vfile
+                columnas={columnas}
+                oncsvcargado={handleCsvCargado}
+                onerrorcsv={handleErrorCsv}
+                onconfirmarcarga={confirmarCarga}>
+            </c-c-s-vfile>
+        </template>
+
+        <!-- Usar el componente modal -->
+        <c-modal-tanque
+            mostrar={mostrarModal}
+            titulo={tituloModal}
+            mensaje={mensajeModal}
+            variante={varianteModal}
+            es-error={esErrorModal}
+            oncerrarmodal={handleCerrarModal}>
+        </c-modal-tanque>
+
+    </div>
+</template>

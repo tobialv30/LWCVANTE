@@ -1,0 +1,22 @@
+.seccion-formulario {
+    background: #f9f9f9;
+    padding: 2.5rem;
+    border-radius: 0.8rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.separador-boton-confirmar {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
+.boton-confirmar {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    transition: transform 0.2s ease;
+}
+
+.boton-confirmar:hover {
+    transform: translateY(-2px);
+}

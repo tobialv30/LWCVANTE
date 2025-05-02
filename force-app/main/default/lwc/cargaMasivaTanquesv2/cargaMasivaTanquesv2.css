@@ -1,0 +1,145 @@
+/* Contenedor general */
+.contenedor-principal {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Barra de progreso */
+.progreso-fondo {
+    background: #f9f9f9;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Título */
+.titulo-principal {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+    color: #16325c;
+}
+
+/* Botones crear/usar */
+.opciones-botones {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.boton-opcion {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    transition: transform 0.2s ease;
+}
+
+.boton-opcion:hover {
+    transform: translateY(-2px);
+}
+
+/* Formulario creación tipo */
+.seccion-formulario {
+    background: #f9f9f9;
+    padding: 2.5rem;
+    border-radius: 0.8rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Botón confirmar tipo */
+.separador-boton-confirmar {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
+.boton-confirmar {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    transition: transform 0.2s ease;
+}
+
+.boton-confirmar:hover {
+    transform: translateY(-2px);
+}
+
+/* Resumen tipo cargado */
+.tarjeta-resumen {
+    background: #e7f3ff;
+    border-left: 5px solid #1b96ff;
+    padding: 1.75rem;
+    margin-bottom: 2.5rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tarjeta-resumen h3 {
+    color: #16325c;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.tarjeta-resumen p {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+/* CSV input y botón confirmar en línea */
+.carga-csv-container {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.input-csv {
+    flex: 1;
+}
+
+.boton-confirmar-csv {
+    flex-shrink: 0;
+    background-color: #28a745;
+    color: white;
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    transition: transform 0.2s ease;
+}
+
+.boton-confirmar-csv:hover {
+    transform: translateY(-2px);
+}
+
+/* Tabla de preview */
+.tabla-preview {
+    margin-top: 2rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.lista-tipos {
+    background: white;
+    border: 1px solid #d8dde6;
+    border-radius: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.item-tipo {
+    padding: 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.item-tipo:hover {
+    background-color: #f1f7ff;
+}
