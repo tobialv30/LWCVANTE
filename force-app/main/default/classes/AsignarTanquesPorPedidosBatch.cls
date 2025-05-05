@@ -63,7 +63,8 @@ global class AsignarTanquesPorPedidosBatch implements Database.Batchable<SObject
 
                 pedidosToUpdate.add(new Pedido__c(
                     Id = pedido.Id,
-                    Estado__c = 'Completado'
+                    Estado__c = 'Completado',
+                    Opportunity__c = null
                 ));
             }
         }
